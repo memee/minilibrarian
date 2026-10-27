@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:;">
+  <title>MiniLibrarian</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <header class="brand"><div class="brand-icon">M</div><div><strong>MiniLibrarian</strong><span>minilogue xd library</span></div></header>
+      <button class="open-button" id="open-library"><span>＋</span> Open Library</button>
+      <section class="midi-panel" aria-labelledby="midi-title">
+        <div class="midi-heading"><h2 id="midi-title">RECEIVE FROM SYNTH</h2><button id="connect-midi" class="text-button">Detect</button></div>
+        <div class="device-status"><span class="device-direction">IN</span><span id="midi-input-status">MIDI input not detected</span></div>
+        <div class="device-status"><span class="device-direction">OUT</span><span id="midi-output-status">MIDI output not detected</span></div>
+        <div class="program-range"><label>Programs <span><input id="range-start" type="number" min="1" max="500" value="1" aria-label="First program"></span> to <span><input id="range-end" type="number" min="1" max="500" value="500" aria-label="Last program"></span></label></div>
+        <button id="receive-programs" class="receive-button" disabled>Receive programs</button>
+        <progress id="receive-progress" max="500" value="0" class="hidden"></progress>
+        <div id="midi-status" class="midi-status" role="status">Connect a minilogue xd to receive its sounds.</div>
+        <button id="cancel-receive" class="text-button hidden">Cancel transfer</button>
+      </section>
+      <div class="search-wrap"><span>⌕</span><input id="search" placeholder="Search programs…" aria-label="Search programs"></div>
+      <div class="list-heading"><span>PROGRAMS</span><span id="program-count"></span></div>
+      <nav id="program-list" class="program-list"></nav>
+      <footer id="source-name">No library open</footer>
+    </aside>
+    <main class="main-area">
+      <section id="empty-state" class="empty-state">
+        <div class="empty-glyph">⌘</div>
+        <h1>Your sounds, in one place.</h1>
+        <p>Open a minilogue xd library or a single program file to browse its sounds.</p>
+        <button class="primary-button" id="empty-open">Open a library</button>
+        <small>Supports .mnlgxdlib and .mnlgxdprog</small>
+      </section>
+      <section id="program-view" class="program-view hidden">
+        <div class="program-top">
+          <div><div class="eyebrow" id="program-position"></div><h1 id="program-name"></h1><div class="subline" id="program-meta"></div></div>
+          <button class="export-button" id="export-program">↧ <span>Save Program…</span></button>
+        </div>
+        <div id="program-comment" class="comment hidden"></div>
+        <div class="tabs"><button class="tab active" data-tab="settings">Settings</button><button class="tab" data-tab="sequencer">Sequencer</button></div>
+        <div id="settings-panel" class="settings-panel"></div>
+        <div id="sequence-panel" class="sequence-panel hidden"></div>
+      </section>
+      <div id="toast" class="toast hidden"></div>
+    </main>
+  </div>
+  <script type="module" src="renderer.js"></script>
+</body>
+</html>

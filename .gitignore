@@ -1,0 +1,22 @@
+.build/
+dist/
+release/
+node_modules/
+.DS_Store
+__pycache__/
+*.py[cod]
+
+# Synth libraries and exported patches can contain personal sound data.
+*.mnlgxdlib
+*.mnlgxdprog
+
+# Generated reports may include full program-bank contents from a user library.
+analysis/library-expanded.*
+analysis/library-inventory.json
+analysis/library-parameters.*
+analysis/library-programs.csv
+analysis/library-sequencer.csv
+analysis/cutoff*-inventory.json
+analysis/expanded-validation.json
+analysis/parameter-validation.json
+analysis/sequencer-example.json
