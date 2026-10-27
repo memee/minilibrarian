@@ -1,45 +1,42 @@
 # MiniLibrarian
 
-Cross-platform Electron app for browsing Korg minilogue xd Sound Librarian
-libraries and individual program exports. The same source runs on macOS,
-Windows, and Linux. It does not need an internet connection at runtime.
+MiniLibrarian is a cross-platform Electron app for browsing Korg minilogue xd
+sound libraries and backing up programs from the synthesizer. It runs on macOS,
+Windows, and Linux and does not require an internet connection at runtime.
 
-## Use
+## Features
 
-On macOS, launch the universal [MiniLibrarian.app](dist/MiniLibrarian.app), or
-install with the DMG or ZIP in `release/`. On Windows and Linux, use the
-installer or AppImage in `release/`.
+- Open `.mnlgxdlib` libraries and `.mnlgxdprog` program files.
+- Search programs and inspect stored parameter values and sequencer events.
+- Export an individual program while preserving its original binary record and
+  programmer/comment metadata.
+- Receive programs over USB MIDI. The app detects the synth's KBD/KNOB and SOUND
+  endpoints and finds its MIDI channel automatically.
+- Save one received program as `.mnlgxdprog` or a range as `.mnlgxdlib`.
 
-Run `npm start`, choose **Open Library**, and select a `.mnlgxdlib` or
-`.mnlgxdprog` file. Search the program list, inspect raw synth settings and
-stored sequencer events, and use **Save Program…** to export a selected
-program. Export preserves that program's original 1,024-byte binary record and
-its programmer/comment metadata.
+Receiving all 500 programs has been confirmed with a connected minilogue xd.
+Received libraries currently contain program records only; favorites, tuning
+tables, and user units are not included. Program settings are shown as stored
+integers, without synth-display conversions. Editing and playback are not yet
+implemented.
 
-Settings are shown as stored integers; synth display conversions are not
-applied. Sequencer data is shown as stored, including events on disabled steps.
-The app does not edit programs or simulate playback.
+## Run from source
 
-## Receive programs from the synth
+Install Node.js, then run:
 
-Connect the minilogue xd over USB and click **Detect**. The app automatically
-pairs its KBD/KNOB input and SOUND output, then searches MIDI channels when you
-start a receive. Choose a program range. **Receive programs** requests each
-selected slot and saves one program as `.mnlgxdprog` or multiple programs as
-`.mnlgxdlib`. A range of 1–500 backs up the full program bank. The generated
-library currently contains program records only; it does not receive
-favorites, tuning tables, or user units.
+```sh
+npm ci
+npm start
+```
 
-The transfer uses Web MIDI with System Exclusive access. Program request and
-dump layouts follow the recovered Sound Librarian protocol documented in
-[`analysis/sysex-transport.md`](analysis/sysex-transport.md). Hardware
-compatibility has not yet been fully validated against a connected minilogue
-xd; start with one program. The app reports detected endpoints and the channel
-it finds.
+Choose **Open Library** to browse a `.mnlgxdlib` or `.mnlgxdprog` file. To receive
+programs, connect the minilogue xd over USB, click **Detect**, choose the
+program range, and click **Receive programs**. The app requests MIDI System
+Exclusive access from the operating system.
 
 ## Build installers
 
-Install dependencies with `npm ci`, then build on each target operating system:
+Run the build on the target platform:
 
 ```sh
 npm run dist:mac
@@ -47,24 +44,24 @@ npm run dist:win
 npm run dist:linux
 ```
 
-Installers and archives are written to `release/`. macOS output is a universal
-DMG and ZIP for Intel and Apple Silicon Macs. Windows output is an x64 NSIS
-installer and portable executable. Linux output is an x64 AppImage. Optional
-ARM64 Windows and Linux builds are available with `npm run dist:win:arm64` and
+Build outputs go in `release/` and are intentionally excluded from Git. macOS
+produces a universal DMG and ZIP for Intel and Apple Silicon. Windows produces
+an x64 NSIS installer and portable app. Linux produces an x64 AppImage. ARM64
+Windows and Linux builds are available with `npm run dist:win:arm64` and
 `npm run dist:linux:arm64`.
 
-## Research tools
+## Reverse-engineering notes
 
-The `tools/` directory contains read-only Python tools and reverse-engineering
-notes for Korg minilogue xd Sound Librarian 1.0.5. Python's standard library is
-sufficient to inspect sample files as JSON:
+The `analysis/` directory documents the file format, MIDI transfer protocol,
+parameter mappings, and limitations found while studying Korg's minilogue xd
+Sound Librarian. The `tools/` directory contains read-only Python inspection
+tools. For example:
 
 ```sh
-python3 tools/inspect_library.py Before.mnlgxdprog --sequencer
-python3 tools/inspect_library.py /path/to/MinilogueXDLibrary.mnlgxdlib
+python3 tools/inspect_library.py path/to/program.mnlgxdprog --sequencer
+python3 tools/inspect_library.py path/to/library.mnlgxdlib
 ```
 
-Parameter offsets come from Korg's MIDI specification and were checked against
-the supplied library. Cutoff also has controlled before/after export
-validation. Values are raw stored integers, not necessarily synth display
-values. Research findings and limitations are in [analysis/README.md](analysis/README.md).
+Synth libraries and individual exported patches are ignored by Git because
+they may contain personal sound data. Research findings and evidence are
+summarized in [analysis/README.md](analysis/README.md).
