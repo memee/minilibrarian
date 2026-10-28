@@ -8,6 +8,7 @@ __pycache__/
 
 # Raw decompiler output is kept locally for research, not in Git.
 analysis/decompiled/
+screenshots/
 
 # Synth libraries and exported patches can contain personal sound data.
 *.mnlgxdlib
