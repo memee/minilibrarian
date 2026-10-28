@@ -6,6 +6,9 @@ node_modules/
 __pycache__/
 *.py[cod]
 
+# Raw decompiler output is kept locally for research, not in Git.
+analysis/decompiled/
+
 # Synth libraries and exported patches can contain personal sound data.
 *.mnlgxdlib
 *.mnlgxdprog
